@@ -1,60 +1,28 @@
 /** @format */
 
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import React, { useContext, useState } from 'react';
+import React from 'react';
 import BackHeader from '@/components/BackHeader';
 import { router } from 'expo-router';
-import { RichText, useEditorBridge } from '@10play/tentap-editor';
+import { RichText } from '@10play/tentap-editor';
 import { TextInput } from 'react-native-gesture-handler';
 import { Colors } from '@/constants/Colors';
 import moment from 'moment';
-import { useJournal } from '@/hooks/useJournal';
-import { useForm, Controller } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import schema from './schema';
-import { FlowContext } from '@/context/FlowContext/flowContext';
-import { v4 as uuidv4 } from 'uuid';
+import { Controller } from 'react-hook-form';
+
 import DateTimePicker from '@react-native-community/datetimepicker';
+import useViewModel from './useViewModel';
 
 const CreateJournal = () => {
-  const { setLoading } = useContext(FlowContext);
-  const { createMutation } = useJournal();
-  const [openDatePicker, setOpenDatePicker] = useState(false); // To show/hide date picker
-  const { control, handleSubmit, setValue } = useForm({
-    resolver: yupResolver(schema),
-    defaultValues: {
-      title: '',
-      date: new Date(),
-    },
-  });
-  const editor = useEditorBridge({
-    autofocus: true,
-    avoidIosKeyboard: true,
-    initialContent: ``,
-  });
-  const onSubmit = async (data: any) => {
-    try {
-      setLoading(true);
-      const body = await editor?.getText();
-      const newEntry = {
-        id: uuidv4(),
-        date: moment(data.date).format('MM/DD/YYYY hh:mm:ss A'),
-        title: data.title,
-        body: body,
-      };
-      await createMutation.mutateAsync(newEntry);
-      setLoading(false);
-      router.back();
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  const handleDateChange = (event: any, selectedDate: Date | undefined) => {
-    setOpenDatePicker(false);
-    if (selectedDate) {
-      setValue('date', selectedDate);
-    }
-  };
+  const {
+    handleDateChange,
+    handleSubmit,
+    onSubmit,
+    control,
+    openDatePicker,
+    setOpenDatePicker,
+    editor,
+  } = useViewModel();
   return (
     <React.Fragment>
       <BackHeader

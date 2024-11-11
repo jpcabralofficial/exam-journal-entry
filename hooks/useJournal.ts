@@ -1,12 +1,12 @@
 /** @format */
 
-// src/hooks/useJournal.ts
 import { useQuery, useMutation, useQueryClient } from 'react-query';
 import {
   getAllEntries,
   createEntry,
   deleteEntry,
   JournalEntry,
+  getEntry,
 } from '../api/journalEntries';
 
 export const useJournal = () => {
@@ -33,6 +33,16 @@ export const useJournal = () => {
       queryClient.invalidateQueries('journalEntries');
     },
   });
+  // Query to get a single journal entry by ID
+  const useGetEntry = (id: string) => {
+    return useQuery<JournalEntry | undefined>(
+      ['journalEntry', id],
+      () => getEntry(id),
+      {
+        enabled: !!id, // This ensures the query will not run until there's an ID
+      }
+    );
+  };
 
   return {
     journalEntries,
@@ -41,5 +51,6 @@ export const useJournal = () => {
     error,
     createMutation,
     deleteMutation,
+    useGetEntry,
   };
 };

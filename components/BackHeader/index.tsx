@@ -7,7 +7,7 @@ import { hitslop } from '@/constants/common';
 
 type props = {
   onBack: () => void;
-  title?: string;
+  title?: string | React.ReactNode;
   rightElement?: React.ReactElement;
   leftElement?: React.ReactElement;
   onSearch?: () => void;
@@ -38,19 +38,7 @@ const BackHeader: React.FC<props> = ({
             <Text className='font-semibold text-sm color-black'>{title}</Text>
           </View>
         )}
-        {leftElement ? (
-          leftElement
-        ) : (
-          <TouchableOpacity
-            onPress={onSearch}
-            hitSlop={hitslop}>
-            <AntDesign
-              name='search1'
-              size={24}
-              color='black'
-            />
-          </TouchableOpacity>
-        )}
+        {leftElement ? leftElement : null}
       </View>
       <View className='h-[1px] w-full bg-gray-300 ' />
     </React.Fragment>
