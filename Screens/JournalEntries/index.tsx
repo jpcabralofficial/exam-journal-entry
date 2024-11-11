@@ -6,20 +6,51 @@ import {
   TouchableOpacity,
   StyleSheet,
   FlatList,
+  Image,
+  ImageSourcePropType,
 } from 'react-native';
-import React, { memo } from 'react';
+import React, { memo, useCallback } from 'react';
 import { useQuery } from 'react-query';
 import { getAllEntries } from '@/api/journalEntries';
 import Header from './Header';
 import { Colors } from '@/constants/Colors';
 import { router } from 'expo-router';
-import { isArray } from 'lodash';
+import { isArray, size } from 'lodash';
 import JournalEntryCard from '@/components/JournalEntryCard';
+import { IMAGES } from '@/constants/images';
 const JournalEntry = () => {
   const { data: entries, isLoading } = useQuery(
     'journalEntries',
     getAllEntries
   );
+  const FallBackRequest = useCallback(
+    ({
+      img,
+      label,
+      labelPress,
+    }: {
+      img: ImageSourcePropType;
+      label: string;
+      labelPress?: () => void;
+    }) => {
+      return (
+        <View className='flex-1 justify-center items-center px-2'>
+          <Image
+            source={img}
+            className='w-full h-3/6'
+            resizeMode='contain'
+          />
+          <Text
+            className='text-center text-blue-500 font-semibold text-xl'
+            onPress={labelPress}>
+            {label}
+          </Text>
+        </View>
+      );
+    },
+    []
+  );
+
   return (
     <View className='flex-1 w-full '>
       <Header />
@@ -34,13 +65,26 @@ const JournalEntry = () => {
         </Text>
       </TouchableOpacity>
       <View className='h-[3px] w-full bg-gray-300 ' />
-      <FlatList
-        data={isArray(entries) ? entries : []}
-        className='px-4'
-        renderItem={({ item }) => {
-          return <JournalEntryCard data={item} />;
-        }}
-      />
+      {!isLoading && size(entries) < 1 ? (
+        <FallBackRequest
+          img={IMAGES.empty}
+          label='Create New Journal'
+          labelPress={() => router.navigate('/JournalEntry/CreateEntry')}
+        />
+      ) : isLoading ? (
+        <FallBackRequest
+          img={IMAGES.loading}
+          label='Loading...'
+        />
+      ) : (
+        <FlatList
+          data={isArray(entries) ? entries : []}
+          className='px-4'
+          renderItem={({ item }) => {
+            return <JournalEntryCard data={item} />;
+          }}
+        />
+      )}
     </View>
   );
 };

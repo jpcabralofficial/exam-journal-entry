@@ -14,7 +14,7 @@ const JOURNAL_STORAGE_KEY = 'journal_entries';
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 export const getAllEntries = async (): Promise<JournalEntry[]> => {
-  await delay(300); // simulate network delay
+  await delay(1000); // simulate network delay
   const entries = await AsyncStorage.getItem(JOURNAL_STORAGE_KEY);
   return entries ? JSON.parse(entries) : [];
 };
