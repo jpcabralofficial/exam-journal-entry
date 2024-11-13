@@ -3,17 +3,21 @@
 This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
 
 ## Get started
+1. make sure you are in node version ^22.*
 
-1. Install dependencies
-
+2. Install dependencies
+using expo
    ```bash
-   npm install
+   expo install
    ```
-
-2. Start the app
+using yarn
+   ```bash
+   yarn install
+   ```
+3. Start the app
 
    ```bash
-    npx expo start
+    yarn ios
    ```
 
 In the output, you'll find options to open the app in a
