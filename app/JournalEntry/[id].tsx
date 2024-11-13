@@ -20,6 +20,7 @@ const JournalEntryInfo = () => {
     autofocus: true,
     avoidIosKeyboard: true,
     initialContent: entry?.body || '',
+    editable: false,
   });
   useEffect(() => {
     setLoading(isEntryLoading);
@@ -27,6 +28,7 @@ const JournalEntryInfo = () => {
   useEffect(() => {
     editor.setContent(entry?.body || '');
   }, [entry]);
+
   const handleDelete = async () => {
     try {
       const isConfirmed = await new Promise<boolean>((resolve) => {

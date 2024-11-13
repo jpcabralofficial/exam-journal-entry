@@ -6,13 +6,14 @@ This is an [Expo](https://expo.dev) project created with [`create-expo-app`](htt
 1. make sure you are in node version ^22.*
 
 2. Install dependencies
-using expo
-   ```bash
-   expo install
-   ```
 using yarn
    ```bash
    yarn install
+   ```
+then update expo dependencies
+using expo
+   ```bash
+   expo install
    ```
 3. Start the app
 
